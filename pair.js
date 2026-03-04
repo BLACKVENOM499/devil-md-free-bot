@@ -23,7 +23,7 @@ const {
   jidNormalizedUser,
   downloadContentFromMessage,
   DisconnectReason
-} = require('bailez');
+} = require('https://www.npmjs.com/package/baileyz');
 
 // ---------------- CONFIG ----------------
 
