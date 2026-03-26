@@ -37,7 +37,7 @@ const config = {
   PREFIX: '.',
   MAX_RETRIES: 3,
   GROUP_INVITE_LINK: 'https://chat.whatsapp.com/ElSDgSJBaOv4PBXOQ10OIS?mode=gi_t',
-  RCD_IMAGE_PATH: 'https://i.ibb.co/v67njtFL/Gemini-Generated-Image-ezfndeezfndeezfn.png',
+  RCD_IMAGE_PATH: 'https://img.sanishtech.com/u/5840a2e7cb897e279ad19c73144ec1d7.png',
   NEWSLETTER_JID: '120363419758690313@newsletter',
   OTP_EXPIRY: 300000,
   OWNER_NUMBER: process.env.OWNER_NUMBER || '94753138584',
@@ -45,9 +45,9 @@ const config = {
   BOT_NAME: '🤍 ᴅᴇᴠɪʟ ᴍᴅ ꜰʀᴇᴇ ʙᴏᴛ 🤍',
   BOT_VERSION: '2.0.0 V',
   OWNER_NAME: '𝗪𝗛𝗜𝗧𝗘 𝗗𝗘𝗩𝗜𝗟 𝗣𝗥𝗢𝗚𝗥𝗔𝗠𝗠𝗘𝗥',
-  IMAGE_PATH: 'https://i.ibb.co/v67njtFL/Gemini-Generated-Image-ezfndeezfndeezfn.png',
+  IMAGE_PATH: 'https://img.sanishtech.com/u/5840a2e7cb897e279ad19c73144ec1d7.png',
   BOT_FOOTER: '🤍 ᴅᴇᴠɪʟ ᴍᴅ ꜰʀᴇᴇ ʙᴏᴛ 🤍',
-  BUTTON_IMAGES: { ALIVE: 'https://i.ibb.co/v67njtFL/Gemini-Generated-Image-ezfndeezfndeezfn.png' }
+  BUTTON_IMAGES: { ALIVE: 'https://img.sanishtech.com/u/5840a2e7cb897e279ad19c73144ec1d7.png' }
 };
 
 // ---------------- MONGO SETUP ----------------
