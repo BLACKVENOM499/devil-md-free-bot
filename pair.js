@@ -41,7 +41,7 @@ const config = {
   NEWSLETTER_JID: '120363419758690313@newsletter',
   OTP_EXPIRY: 300000,
   OWNER_NUMBER: process.env.OWNER_NUMBER || '94753138584',
-  CHANNEL_LINK: 'https://whatsapp.com/channel/0029Vb7NcUw2phHR4mDZJ51g',
+  CHANNEL_LINK: 'https://whatsapp.com/channel/0029Vb7nHQ42phHTjXb1qL2m',
   BOT_NAME: '🤍 ᴅᴇᴠɪʟ ᴍᴅ ꜰʀᴇᴇ ʙᴏᴛ 🤍',
   BOT_VERSION: '2.0.0 V',
   OWNER_NAME: '𝗪𝗛𝗜𝗧𝗘 𝗗𝗘𝗩𝗜𝗟 𝗣𝗥𝗢𝗚𝗥𝗔𝗠𝗠𝗘𝗥',
