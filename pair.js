@@ -36,17 +36,17 @@ const config = {
   AUTO_LIKE_EMOJI: ['🔥','😀','👍','😃','😄','😁','😎','🥳','🌞','🌈','❤️'],
   PREFIX: '.',
   MAX_RETRIES: 3,
-  GROUP_INVITE_LINK: 'https://chat.whatsapp.com/LADTX98H0a56ixDmHV3FZo',
+  GROUP_INVITE_LINK: 'https://chat.whatsapp.com/ElSDgSJBaOv4PBXOQ10OIS?mode=gi_t',
   RCD_IMAGE_PATH: 'https://i.ibb.co/v67njtFL/Gemini-Generated-Image-ezfndeezfndeezfn.png',
   NEWSLETTER_JID: '120363419758690313@newsletter',
   OTP_EXPIRY: 300000,
-  OWNER_NUMBER: process.env.OWNER_NUMBER || '94785316830',
+  OWNER_NUMBER: process.env.OWNER_NUMBER || '94753138584',
   CHANNEL_LINK: 'https://whatsapp.com/channel/0029Vb7NcUw2phHR4mDZJ51g',
-  BOT_NAME: '🐦‍🔥 ᴅᴛᴇᴄ ᴍɪɴɪ ᴠ1 🐦‍🔥',
-  BOT_VERSION: '1.0.0V',
-  OWNER_NAME: 'Yasas Dileepa',
+  BOT_NAME: '🤍 ᴅᴇᴠɪʟ ᴍᴅ ꜰʀᴇᴇ ʙᴏᴛ 🤍',
+  BOT_VERSION: '2.0.0 V',
+  OWNER_NAME: '𝗪𝗛𝗜𝗧𝗘 𝗗𝗘𝗩𝗜𝗟 𝗣𝗥𝗢𝗚𝗥𝗔𝗠𝗠𝗘𝗥',
   IMAGE_PATH: 'https://i.ibb.co/v67njtFL/Gemini-Generated-Image-ezfndeezfndeezfn.png',
-  BOT_FOOTER: '🐦‍🔥 ᴅᴛᴇᴄ ᴍɪɴɪ ᴠ1 🐦‍🔥',
+  BOT_FOOTER: '🤍 ᴅᴇᴠɪʟ ᴍᴅ ꜰʀᴇᴇ ʙᴏᴛ 🤍',
   BUTTON_IMAGES: { ALIVE: 'https://i.ibb.co/v67njtFL/Gemini-Generated-Image-ezfndeezfndeezfn.png' }
 };
 
