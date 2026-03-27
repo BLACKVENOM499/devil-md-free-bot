@@ -10,11 +10,11 @@
     "node": "20.x"
   },
   "dependencies": {
-    "@whiskeysockets/baileys": "^6.7.21",
+    "@whiskeysockets/baileys": "github:Jeliostarr/DEV-Baileys",
     "express": "^4.18.2",
     "fs-extra": "^11.2.0",
-    "pino": "^8.17.0",
-    "jimp": "^1.6.0",
+    "pino": "latest",
+    "jimp": "latest",
     "@octokit/rest": "^20.0.2",
     "cheerio": "1.0.0-rc.12",
     "yt-search": "2.12.1",
