@@ -636,95 +636,88 @@ END:VCARD`
 }
 
 case 'setting': {
-    try { await socket.sendMessage(sender, { react: { text: '⚙️', key: msg.key } }); } catch (e) {}
+  await socket.sendMessage(sender, { react: { text: '⚙️', key: msg.key } });
+  try {
+    const sanitized = (number || '').replace(/[^0-9]/g, '');
+    const senderNum = (nowsender || '').split('@')[0];
+    const ownerNum = config.OWNER_NUMBER.replace(/[^0-9]/g, '');
     
-    try {
-        const sanitized = (number || '').replace(/[^0-9]/g, '');
-        const senderNum = (nowsender || '').split('@')[0];
-        const ownerNum = config.OWNER_NUMBER.replace(/[^0-9]/g, '');
-        
-        // 1. Permission Check
-        if (senderNum !== sanitized && senderNum !== ownerNum) {
-            const shonux = {
-                key: { remoteJid: "status@broadcast", participant: "0@s.whatsapp.net", fromMe: false, id: "DTEC_SECURE" },
-                message: { contactMessage: { displayName: "🛡️ SECURITY", vcard: `BEGIN:VCARD\nVERSION:3.0\nN:Security;;;;\nFN:Security\nORG:Meta\nEND:VCARD` } }
-            };
-            return await socket.sendMessage(sender, { 
-                text: '⚠️ *ᴀᴄᴄᴇss ᴅᴇɴɪᴇᴅ!*\nOnly the authorized owner can modify these settings.' 
-            }, { quoted: shonux });
-        }
-
-        // 2. Load Configuration
-        const currentConfig = await loadUserConfigFromMongo(sanitized) || {};
-        const botName = currentConfig.botName || '⛩️ 𝐀𝐊𝐈𝐍𝐃𝐔 𝐌𝐈𝐍𝐈 ⛩️';
-        const prefix = currentConfig.PREFIX || config.PREFIX;
-        const logo = currentConfig.logo || 'https://files.catbox.moe/m94645.jpg';
-
-        // Helper for Status (🔵 = On / ⚪ = Off)
-        const stat = (val) => (val === 'true' || val === 'on' || val === 'online' || val === 'available' || val === 'composing' || val === 'recording') ? '🔵' : '⚪';
-
-        // 3. Premium Text Layout (No Buttons)
-        const settingText = `
-*╭───────────━━━━━━━────*
-*│* ⚙️   *${botName.toUpperCase()} 𝐂𝐎𝐍𝐅𝐈𝐆*
-*╰───────────━━━━━━━────*
-
-*┌─ 🛠️ ᴡᴏʀᴋ ᴍᴏᴅᴇ ᴄᴏɴᴛ්‍රෝල්*
-*│* 👤 *ᴡᴏʀᴋ ᴛʏᴘᴇ:* ${currentConfig.WORK_TYPE || 'public'}
-*│* 💠 ${prefix}wtype public | private | groups
-*└───────────────────┈*
-
-*┌─ 🤖 ᴀᴜᴛᴏᴍᴀᴛɪᴏɴ sᴛᴀᴛᴜs*
-*│* ⌨️ *ᴛʏᴘɪɴɢ:* ${stat(currentConfig.AUTO_TYPING)}
-*│* ${prefix}autotyping on/off
-*│* 🎙️ *ʀᴇᴄᴏʀᴅɪɴɢ:* ${stat(currentConfig.AUTO_RECORDING)}
-*│* ${prefix}autorecording on/off
-*│* ⛅ *ᴀʟʟᴡᴀʏs ᴏɴʟɪɴᴇ:* ${stat(currentConfig.PRESENCE)}
-*│* ${prefix}botpresence online/offline
-*└──────────────────┈*
-
-*┌─ 📈 sᴛᴀᴛᴜs & ᴍsɢ ᴄොɴꜰɪɢ*
-*│* 👀 *sᴛᴀᴛුs sᴇᴇɴ:* ${stat(currentConfig.AUTO_VIEW_STATUS)}
-*│* ${prefix}rstatus on/off
-*│* 🌌 *sᴛᴀᴛුs ʀᴇᴀᴄට්:* ${stat(currentConfig.AUTO_LIKE_STATUS)}
-*│* ${prefix}arm on/off
-*│* 🚫 *ᴀɴᴛɪ ᴄᴀල:* ${stat(currentConfig.ANTI_CALL)}
-*│* ${prefix}creject on/off
-*└──────────────────┈*
-
-*┌─ 📩 ʀᴇᴀᴅ ʀᴇᴄᴇɪᴘᴛs*
-*│* ✅ *ᴍsɢ ʀᴇᴀඩ:* ${currentConfig.AUTO_READ_MESSAGE || 'off'}
-*│* 💠 ${prefix}mread all | cmd | off
-*└──────────────────┈*
-
-*📢 ᴛɪᴘ:* _ᴄᴏᴘʏ ᴀɴᴅ ᴘᴀsᴛᴇ ᴛʜᴇ ᴄᴏᴍᴍᴀɴᴅ ᴛᴏ ᴄʜᴀɴɢᴇ._
-*© ᴘᴏᴡᴇරෙඩ ʙʏ ${botName}*`;
-
-        // 4. Sending with Large Preview (No buttons array)
-        let imagePayload = String(logo).startsWith('http') ? { url: logo } : fs.readFileSync(logo);
-
-        await socket.sendMessage(sender, {
-            image: imagePayload,
-            caption: settingText,
-            footer: `⚙️ ${botName} ꜱʏꜱᴛᴇම ᴄᴏɴꜰɪɢ`,
-            headerType: 4,
-            contextInfo: {
-                externalAdReply: {
-                    title: `🛡️ ${botName} 𝐒𝐘𝐒𝐓𝐄𝐌 𝐂𝐎𝐍𝐅𝐈𝐆`,
-                    body: "⚡ 𝚀𝚞𝚒𝚌𝚔 𝙲𝚘𝚗𝚏𝚒𝚐 𝙿𝚊𝚗𝚎𝚕",
-                    thumbnailUrl: logo,
-                    sourceUrl: "https://whatsapp.com",
-                    mediaType: 1,
-                    renderLargerThumbnail: true
-                }
-            }
-        }, { quoted: msg });
-
-    } catch (e) {
-        console.error('Settings UI Error:', e);
-        await socket.sendMessage(sender, { text: "*❌ Error displaying settings!*" });
+    // Permission check
+    if (senderNum !== sanitized && senderNum !== ownerNum) {
+      const shonux = {
+        key: { remoteJid: "status@broadcast", participant: "0@s.whatsapp.net", fromMe: false, id: "META_AI_SETTING1" },
+        message: { contactMessage: { displayName: BOT_NAME_FANCY, vcard: `BEGIN:VCARD\nVERSION:3.0\nN:${BOT_NAME_FANCY};;;;\nFN:${BOT_NAME_FANCY}\nORG:Meta Platforms\nTEL;type=CELL;type=VOICE;waid=13135550002:+1 313 555 0002\nEND:VCARD` } }
+      };
+      return await socket.sendMessage(sender, { text: '❌ Permission denied. Only the session owner or bot owner can change settings.' }, { quoted: shonux });
     }
-    break;
+
+    // Get current settings
+    const currentConfig = await loadUserConfigFromMongo(sanitized) || {};
+    const botName = currentConfig.botName || BOT_NAME_FANCY;
+    const prefix = currentConfig.PREFIX || config.PREFIX;
+    const logo = currentConfig.logo || config.RCD_IMAGE_PATH;
+
+    // Helper function to show status
+    const stat = (val) => (val === 'true' || val === 'on' || val === 'online') ? '✅' : '❌';
+
+    const text = `
+⚙️ *${botName} SETTINGS MENU* ⚙️
+____________________________________
+
+*➤ 𝐖𝙾𝚁𝙺 𝐓𝚈𝙿𝙴* (Current: ${currentConfig.WORK_TYPE || 'public'})
+  ➜ ${prefix}wtype public
+  ➜ ${prefix}wtype private
+  ➜ ${prefix}wtype groups
+  ➜ ${prefix}wtype inbox
+
+*➤ 𝐅𝙰𝙺𝙴 𝐓𝚈𝙿𝙸𝙽𝙶* (${stat(currentConfig.AUTO_TYPING)})
+  ➜ ${prefix}autotyping on
+  ➜ ${prefix}autotyping off
+
+*➤ 𝐅𝙰𝙺𝙴 𝐑𝙴𝙲𝙾𝙳𝙸𝙽𝙶* (${stat(currentConfig.AUTO_RECORDING)})
+  ➜ ${prefix}autorecording on
+  ➜ ${prefix}autorecording off
+
+*➤ 𝐀𝙻𝙻𝚆𝙰𝚈𝚂 𝐎𝙽𝙻𝙸𝙽𝙴* (${currentConfig.PRESENCE || 'offline'})
+  ➜ ${prefix}botpresence online
+  ➜ ${prefix}botpresence offline
+
+*➤ 𝐀𝚄𝚃𝙾 𝐒𝚃𝙰𝚃𝚄𝚂 𝐒𝙴𝙴𝙽* (${stat(currentConfig.AUTO_VIEW_STATUS)})
+  ➜ ${prefix}rstatus on
+  ➜ ${prefix}rstatus off
+
+*➤ 𝐀𝚄𝚃𝙾 𝐒𝚃𝙰𝚃𝚄𝚂 𝐑𝙴𝙰𝙲𝚃* (${stat(currentConfig.AUTO_LIKE_STATUS)})
+  ➜ ${prefix}arm on
+  ➜ ${prefix}arm off
+
+*➤ 𝐀𝚄𝚃𝙾 𝐑𝙴𝙹𝙴𝙲𝚃 𝐂𝙰𝙻𝙻* (${stat(currentConfig.ANTI_CALL)})
+  ➜ ${prefix}creject on
+  ➜ ${prefix}creject off
+
+*➤ 𝐀𝚄𝚃𝙾 𝐌𝙰𝚂𝚂𝙰𝙶𝙴 𝐑𝙴𝙰𝙳* (${currentConfig.AUTO_READ_MESSAGE || 'off'})
+  ➜ ${prefix}mread all
+  ➜ ${prefix}mread cmd
+  ➜ ${prefix}mread off
+____________________________________
+💡 *Reply with the command needed.*
+`;
+
+    let imagePayload = String(logo).startsWith('http') ? { url: logo } : fs.readFileSync(logo);
+
+    await socket.sendMessage(sender, {
+      image: imagePayload,
+      caption: text,
+      footer: `🔥 ${botName} CONFIG 🔥`,
+      // Optional: Add a single MENU button for easy navigation
+     
+      headerType: 4
+    }, { quoted: msg });
+
+  } catch (e) {
+    console.error('Setting command error:', e);
+    await socket.sendMessage(sender, { text: "*❌ Error loading settings!*" }, { quoted: msg });
+  }
+  break;
 }
 case 'wtype': {
   await socket.sendMessage(sender, { react: { text: '🛠️', key: msg.key } });
