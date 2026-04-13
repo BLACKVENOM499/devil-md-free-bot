@@ -3563,36 +3563,102 @@ case 'menu': {
       { buttonId: `${config.PREFIX}creative`, buttonText: { displayText: "🎨 𝐂𝐑𝐄𝐀𝐓𝐈𝐕𝐄 𝐌𝐄𝐍𝐔" }, type: 1 },
       { buttonId: `${config.PREFIX}tools`, buttonText: { displayText: "🛠️ 𝐓𝐎𝐎𝐋𝐒 𝐌𝐄𝐍𝐔" }, type: 1 },
       { buttonId: `${config.PREFIX}settings`, buttonText: { displayText: "⚙️ 𝐒𝐄𝐓𝐓𝐈𝐍𝐆𝐒 𝐌𝐄𝐍𝐔" }, type: 1 },
-      { buttonId: `${config.PREFIX}owner`, buttonText: { displayText: "🥷 𝐎𝐖𝐍𝐄𝐑 𝐌𝐄𝐍𝐔" }, type: 1 }
-    ];
+case 'menu': {
+    try { await socket.sendMessage(sender, { react: { text: "🔮", key: msg.key } }); } catch(e){}
 
-    // 📤 Sending as Document (PDF)
-    await socket.sendMessage(sender, {
-      document: imagePayload,
-      mimetype: 'application/pdf',
-      fileName: `𝐃𝐓𝐄𝐂 𝐌𝐈𝐍𝐈 𝐕𝟏 𝐒𝐘𝐒𝐓𝐄𝐌 🔮`, 
-      fileLength: 109951162777600, 
-      pageCount: 2025,
-      caption: text,
-      contextInfo: {
-          externalAdReply: {
-              title: title,
-              body: "𝐅𝐢𝐥𝐞 𝐒𝐢𝐳𝐞 : 100𝐓𝐁",
-              thumbnail: bufferImg,
-              sourceUrl: 'https://whatsapp.com',
-              mediaType: 1,
-              renderLargerThumbnail: true
-          }
-      },
-      buttons,
-      headerType: 6
-    }, { quoted: shonux });
+    try {
+        const startTime = socketCreationTime.get(number) || Date.now();
+        const uptime = Math.floor((Date.now() - startTime) / 1000);
+        const hours = Math.floor(uptime / 3600);
+        const minutes = Math.floor((uptime % 3600) / 60);
+        const seconds = Math.floor(uptime % 60);
 
-  } catch (err) {
-    console.error('menu command error:', err);
-    try { await socket.sendMessage(sender, { text: '❌ Failed to show menu.' }, { quoted: msg }); } catch(e){}
-  }
-  break;
+        let userCfg = {};
+        try { if (number && typeof loadUserConfigFromMongo === 'function') userCfg = await loadUserConfigFromMongo((number || '').replace(/[^0-9]/g, '')) || {}; }
+        catch(e){ userCfg = {}; }
+
+        const title = userCfg.botName || '⛩️ 𝐀𝐊𝐈𝐍𝐃𝐔 𝐌𝐈𝐍𝐈 ⛩️';
+        const curHr = new Date().getHours();
+        const greetings = curHr < 12 ? 'ɢᴏᴏᴅ ᴍᴏʀɴɪɴɢ ⛅' : curHr < 18 ? 'ɢᴏᴏᴅ ᴀꜰᴛᴇʀɴᴏᴏɴ 🌞' : 'ɢᴏᴏᴅ ᴇᴠᴇɴɪɴɢ 🌙';
+
+        const shonux = {
+            key: { remoteJid: "status@broadcast", participant: "0@s.whatsapp.net", fromMe: false, id: "META_AI_FAKE_ID_MENU" },
+            message: {
+                contactMessage: {
+                    displayName: title,
+                    vcard: `BEGIN:VCARD\nVERSION:3.0\nN:${title};;;;\nFN:${title}\nORG:DTEC Team\nEND:VCARD`
+                }
+            }
+        };
+
+        const defaultImg = 'https://files.catbox.moe/m94645.jpg';
+        const useLogo = userCfg.logo || defaultImg;
+        let imagePayload = String(useLogo).startsWith('http') ? { url: useLogo } : fs.readFileSync(useLogo);
+
+        const menuText = `
+👋 *${greetings}*
+
+*╭───────────────────────*
+*│  🔮  𝐃𝐓𝐄𝐂 𝐃𝐀𝐒𝐇𝐁𝐎𝐀𝐑𝐃  │*
+*╰───────────────────────*
+
+*❒ 👤 ᴏᴡɴᴇʀ:* ${config.OWNER_NAME || 'Akindu Mini'}
+*❒ 🤖 ʙᴏᴛ:* ${title}
+*❒ ⏰ ᴜᴘᴛɪᴍᴇ:* ${hours}h ${minutes}m ${seconds}s
+*❒ 🛠️ ᴠᴇʀsɪᴏɴ:* ${config.BOT_VERSION || '1.0.0'}
+
+*✨ sᴇʟᴇᴄᴛ ᴀ ᴄᴀᴛᴇɢᴏʀʏ ꜰʀᴏᴍ ᴛʜᴇ ʟɪsᴛ ʙᴇʟᴏᴡ.*
+`;
+
+        const menuButtons = [
+            {
+                buttonId: 'main_menu',
+                buttonText: { displayText: '📂 sᴇʟᴇᴄᴛ ᴍᴇɴᴜ' },
+                type: 4,
+                nativeFlowInfo: {
+                    name: 'single_select',
+                    paramsJson: JSON.stringify({
+                        title: '🔎 ᴄᴏᴍᴍᴀɴᴅ ʟɪsᴛ',
+                        sections: [
+                            {
+                                title: '⚡ ᴍᴀɪɴ ᴄᴀᴛᴇɢᴏʀɪᴇs',
+                                rows: [
+                                    { title: '📂 ᴅᴏᴡɴʟᴏᴀᴅ ᴍᴇɴᴜ', description: 'Social media video/audio downloaders', id: `${config.PREFIX}download` },
+                                    { title: '🎨 ᴄʀᴇᴀᴛɪᴠᴇ ᴍᴇɴᴜ', description: 'AI tools and image generators', id: `${config.PREFIX}creative` },
+                                    { title: '🛠️ ᴛᴏᴏʟs ᴍᴇɴᴜ', description: 'Useful utility tools', id: `${config.PREFIX}tools` },
+                                    { title: '⚙️ sᴇᴛᴛɪɴɢs ᴍᴇɴᴜ', description: 'Configure bot preferences', id: `${config.PREFIX}settings` },
+                                    { title: '🥷 ᴏᴡɴᴇʀ ᴍᴇɴᴜ', description: 'Developer and contact info', id: `${config.PREFIX}owner` }
+                                ]
+                            }
+                        ]
+                    })
+                }
+            }
+        ];
+
+        // 📤 Sending with refined design
+        await socket.sendMessage(sender, {
+            image: imagePayload,
+            caption: menuText,
+            footer: `© ᴘᴏᴡᴇʀᴇᴅ ʙʏ ${title}`,
+            buttons: menuButtons,
+            headerType: 4,
+            viewOnce: true,
+            contextInfo: {
+                externalAdReply: {
+                    title: title,
+                    body: "⚡ 𝚀𝚞𝚒𝚌𝚔 𝙰𝚌𝚌𝚎𝚜𝚜 𝙼𝚎𝚗𝚞",
+                    thumbnailUrl: defaultImg,
+                    mediaType: 1,
+                    renderLargerThumbnail: true
+                }
+            }
+        }, { quoted: shonux });
+
+    } catch (err) {
+        console.error('menu error:', err);
+    }
+    break;
 }
 
 // ==================== DOWNLOAD MENU ====================
