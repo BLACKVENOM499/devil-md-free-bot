@@ -634,7 +634,7 @@ END:VCARD`
 
     break;
 }
-:
+
 case 'setting': {
     try { await socket.sendMessage(sender, { react: { text: '⚙️', key: msg.key } }); } catch (e) {}
     
